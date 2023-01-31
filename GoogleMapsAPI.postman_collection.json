@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "22268eaa-aec3-4f38-8886-448890e351ca",
+		"name": "GoogleMapsAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21014030"
+	},
+	"item": [
+		{
+			"name": "AddLocation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"SetVariable\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    console.log('This is our json data=', jsonData.place_id)\r",
+							"    pm.environment.set(\"placeID\", jsonData.place_id);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"location\": {\r\n        \"lat\": -38.383494,\r\n        \"lng\": 33.427362\r\n    },\r\n    \"accuracy\": 50,\r\n    \"name\": \"Frontline house\",\r\n    \"phone_number\": \"(+91) 983 893 3937\",\r\n    \"address\": \"29, side layout, cohen 09\",\r\n    \"types\": [\r\n        \"shoe park\",\r\n        \"shop\"\r\n    ],\r\n    \"website\": \"http://google.com\",\r\n    \"language\": \"French-IN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://rahulshettyacademy.com/maps/api/place/add/json?key=qaclick123",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"maps",
+						"api",
+						"place",
+						"add",
+						"json"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "qaclick123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlace",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"VerificationOfSatusCode\", function () {\r",
+							"   if (pm.environment.get(\"placeID\")) {\r",
+							"        pm.response.to.have.status(200);\r",
+							"        pm.test(\"AddressCheck\", function () {\r",
+							"        var jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData.address).to.eql(\"29, side layout, cohen 09\");\r",
+							"\r",
+							"});\r",
+							"    } else {\r",
+							"        pm.response.to.have.status(404);\r",
+							"        postman.setNextRequest(null);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"   "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \r\n    \t\"location\":{\r\n \r\n    \t\"lat\" : -38.383494,\r\n \r\n    \t\"lng\" : 33.427362\r\n \r\n    \t},\r\n \r\n    \t\"accuracy\":50,\r\n \r\n    \t\"name\":\"Frontline house\",\r\n \r\n    \t\"phone_number\":\"(+91) 983 893 3937\",\r\n \r\n    \t\"address\" : \"29, side layout, cohen 09\",\r\n \r\n    \t\"types\": [\"shoe park\",\"shop\"],\r\n \r\n    \t\"website\" : \"http://google.com\",\r\n \r\n    \t\"language\" : \"French-IN\"\r\n \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://rahulshettyacademy.com/maps/api/place/get/json?place_id={{placeID}}&key=qaclick123",
+					"protocol": "http",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"maps",
+						"api",
+						"place",
+						"get",
+						"json"
+					],
+					"query": [
+						{
+							"key": "place_id",
+							"value": "{{placeID}}"
+						},
+						{
+							"key": "key",
+							"value": "qaclick123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"AddressUpdated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.msg).to.eql(\"Address successfully updated\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"place_id\":\"{{placeID}}\",\r\n\"address\":\"70 winter walk, USA\",\r\n\"key\":\"qaclick123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://rahulshettyacademy.com/maps/api/place/update/json?place_id={{placeID}}&key=qaclick123",
+					"protocol": "http",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"maps",
+						"api",
+						"place",
+						"update",
+						"json"
+					],
+					"query": [
+						{
+							"key": "place_id",
+							"value": "{{placeID}}"
+						},
+						{
+							"key": "key",
+							"value": "qaclick123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAPI",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.environment.set(\"placeID\", null);\r",
+							"\r",
+							"postman.setNextRequest(\"GetPlace\");\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"place_id\":\"{{placeID}}\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://rahulshettyacademy.com/maps/api/place/delete/json?key=qaclick123",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"maps",
+						"api",
+						"place",
+						"delete",
+						"json"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "qaclick123"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
